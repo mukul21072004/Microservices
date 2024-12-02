@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Planner</title>
+    <style>
+        body {
+            background-color: #121212; /* Dark background */
+            color: #ffffff; /* Light text color */
+            font-family: Arial, sans-serif; /* Font style */
+            margin: 0;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #ffcc00; /* Highlighted heading color */
+        }
+        form {
+            background-color: #1e1e1e; /* Form background */
+            padding: 20px;
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
+            margin-bottom: 20px;
+        }
+        input[type="text"], input[type="date"] {
+            width: calc(100% - 22px); /* Full width minus padding */
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #444; /* Border color */
+            border-radius: 4px; /* Rounded corners */
+            background-color: #333; /* Input background */
+            color: #fff; /* Input text color */
+        }
+        button {
+            background-color: #ffcc00; /* Button color */
+            color: #121212; /* Button text color */
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px; /* Rounded corners */
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #e6b800; /* Button hover effect */
+        }
+        ul {
+            list-style-type: none; /* Remove bullet points */
+            padding: 0;
+        }
+        li {
+            background-color: #1e1e1e; /* Trip item background */
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Shadow effect */
+        }
+    </style>
+</head>
+<body>
+    <h1>Travel Planner</h1>
+    <form action="/add_trip" method="post">
+        <input type="text" name="destination" placeholder="Destination" required>
+        <input type="date" name="date" required>
+        <input type="text" name="hotel" placeholder="Hotel" required>
+        <input type="text" name="places_to_visit" placeholder="Places to Visit" required>
+        <input type="text" name="budget" placeholder="Budget" required>
+        <button type="submit">Add Trip</button>
+    </form>
+    <h2>Your Trips</h2>
+    <ul>
+        {% for trip in trips %}
+        <li>
+            <strong>Destination:</strong> {{ trip.destination }}<br>
+            <strong>Date:</strong> {{ trip.date }}<br>
+            <strong>Hotel:</strong> {{ trip.hotel }}<br>
+            <strong>Places to Visit:</strong> {{ trip.places_to_visit }}<br>
+            <strong>Budget:</strong> {{ trip.budget }}<br>
+            <button onclick="editTrip('{{ trip._id }}')">Edit</button>
+            <form action="/delete_trip/{{ trip._id }}" method="post" style="display:inline;">
+                <button type="submit">Delete</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <!-- Edit Form -->
+    <div id="editTripForm" style="display:none;">
+        <h2>Edit Trip</h2>
+        <form id="editForm" action="/edit_trip" method="post">
+            <input type="hidden" name="trip_id" id="editTripId">
+            <input type="text" name="destination" placeholder="Destination" required id="editDestination">
+            <input type="date" name="date" required id="editDate">
+            <input type="text" name="hotel" placeholder="Hotel" required id="editHotel">
+            <input type="text" name="places_to_visit" placeholder="Places to Visit" required id="editPlaces">
+            <input type="text" name="budget" placeholder="Budget" required id="editBudget">
+            <button type="submit">Update Trip</button>
+        </form>
+        <button onclick="closeEdit()">Cancel</button>
+    </div>
+
+    <script>
+        function editTrip(tripId) {
+            fetch(`/trip/${tripId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error);
+                        return;
+                    }
+                    document.getElementById('editTripId').value = tripId;
+                    document.getElementById('editDestination').value = data.destination;
+                    document.getElementById('editDate').value = data.date;
+                    document.getElementById('editHotel').value = data.hotel;
+                    document.getElementById('editPlaces').value = data.places_to_visit;
+                    document.getElementById('editBudget').value = data.budget;
+                    document.getElementById('editTripForm').style.display = 'block';
+                })
+                .catch(error => console.error(error));
+        }
+
+        function closeEdit() {
+            document.getElementById('editTripForm').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

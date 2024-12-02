@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trip Detail</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #333;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #fff;
+        }
+        .trip-info {
+            background: #444;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+        button {
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #4cae4c;
+        }
+    </style>
+</head>
+<body>
+    <h1>Trip Detail</h1>
+    <div class="trip-info">
+        <strong>Destination:</strong> {{ trip.destination }}<br>
+        <strong>Date:</strong> {{ trip.date }}<br>
+        <strong>Hotel:</strong> {{ trip.hotel }}<br>
+        <strong>Places to Visit:</strong> {{ trip.places_to_visit }}<br>
+        <strong>Budget:</strong> {{ trip.budget }}<br>
+    </div>
+    <button onclick="window.history.back()">Back</button>
+</body>
+</html>
